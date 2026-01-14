@@ -1,0 +1,61 @@
+<h2>Crear Cliente</h2>
+
+<!-- Mensaje de error -->
+<div *ngIf="error" class="error">
+    {{ error }}
+</div>
+
+<form (ngSubmit)="guardar()" class="form">
+
+    <div class="form-row">
+        <label>Cliente ID</label>
+        <input [(ngModel)]="cliente.clienteId" name="clienteId" required />
+    </div>
+
+    <div class="form-row">
+        <label>Nombre</label>
+        <input [(ngModel)]="cliente.nombre" name="nombre" required />
+    </div>
+
+    <div class="form-row">
+        <label>Género</label>
+        <input [(ngModel)]="cliente.genero" name="genero" />
+    </div>
+
+    <div class="form-row">
+        <label>Edad</label>
+        <input type="number" [(ngModel)]="cliente.edad" name="edad" />
+    </div>
+
+    <div class="form-row">
+        <label>Identificación</label>
+        <input [(ngModel)]="cliente.identificacion" name="identificacion" />
+    </div>
+
+    <div class="form-row">
+        <label>Dirección</label>
+        <input [(ngModel)]="cliente.direccion" name="direccion" />
+    </div>
+
+    <div class="form-row">
+        <label>Teléfono</label>
+        <input [(ngModel)]="cliente.telefono" name="telefono" />
+    </div>
+
+    <div class="form-row">
+        <label>Contraseña</label>
+        <input type="password" [(ngModel)]="cliente.contrasena" name="contrasena" />
+    </div>
+
+    <!-- Botones -->
+    <div class="form-actions">
+        <button type="button" class="btn btn-secondary" routerLink="/clientes">
+            Regresar
+        </button>
+
+        <button type="submit" class="btn btn-primary" [disabled]="loading">
+            {{ loading ? 'Guardando...' : 'Crear Cliente' }}
+        </button>
+    </div>
+
+</form>
