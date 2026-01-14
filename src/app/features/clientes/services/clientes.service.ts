@@ -45,9 +45,6 @@ export class ClienteService {
      * Actualizar el estado de un cliente (activo/inactivo)
      */
     actualizarCliente(clienteId: string, estado: boolean): Observable<void> {
-        //Construimos el body tal como lo espera el backend
-        const body: UpdateEstadoClienteRequest = { estado };
-
-        return this.http.patch<void>(`${this.clienteUrl}/${clienteId}/estado`, body);
+        return this.http.patch<void>(`${this.clienteUrl}/${clienteId}/estado`, estado);
     }
 }

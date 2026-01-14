@@ -1,0 +1,42 @@
+<h2>Crear Cuenta</h2>
+
+<div *ngIf="error" class="error">
+  {{ error }}
+</div>
+
+<form class="form">
+
+  <div class="form-row">
+    <label>Número de Cuenta</label>
+    <input [(ngModel)]="cuenta.numeroCuenta" name="numeroCuenta" required />
+  </div>
+
+  <div class="form-row">
+    <label>Tipo de Cuenta</label>
+    <select [(ngModel)]="cuenta.tipoCuenta" name="tipoCuenta">
+      <option [ngValue]="1">Ahorros</option>
+      <option [ngValue]="2">Corriente</option>
+    </select>
+  </div>
+
+  <div class="form-row">
+    <label>Saldo Inicial</label>
+    <input type="number" [(ngModel)]="cuenta.saldoInicial" name="saldoInicial" />
+  </div>
+
+  <div class="form-row">
+    <label>Cliente ID</label>
+    <input [(ngModel)]="cuenta.clienteId" name="clienteId" required />
+  </div>
+
+  <div class="actions">
+    <button type="button" class="btn btn-secondary" (click)="regresar()">
+      Regresar
+    </button>
+
+    <button type="submit" class="btn btn-primary" (click)="guardar()" [disabled]="loading">
+      {{ loading ? 'Guardando...' : 'Crear Cuenta' }}
+    </button>
+  </div>
+
+</form>

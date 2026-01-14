@@ -1,0 +1,46 @@
+<h2>Listado de Cuentas</h2>
+
+<div class="toolbar">
+  <div class="search-box">
+    <input
+      type="text"
+      placeholder="Número de cuenta"
+      [(ngModel)]="numeroCuentaBusqueda"
+    />
+
+    <button class="btn btn-primary" (click)="buscarPorNumero()">
+      Buscar
+    </button>
+
+    <button class="btn btn-secondary" (click)="limpiarBusqueda()">
+      Limpiar
+    </button>
+  </div>
+
+  <button class="btn btn-primary" routerLink="/cuentas/nuevo">
+    Nueva Cuenta
+  </button>
+</div>
+
+<table
+  class="table"
+  *ngIf="!loading && cuentas.length > 0"
+>
+  <thead>
+    <tr>
+      <th>Número</th>
+      <th>Tipo</th>
+      <th>Saldo</th>
+      <th>Estado</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let cuenta of cuentas">
+      <td>{{ cuenta.numeroCuenta }}</td>
+      <td>{{ cuenta.tipoCuenta }}</td>
+      <td>{{ cuenta.saldo | currency }}</td>
+      <td>{{ cuenta.estado ? 'Activa' : 'Inactiva' }}</td>
+    </tr>
+  </tbody>
+</table>

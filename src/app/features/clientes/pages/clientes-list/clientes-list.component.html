@@ -1,57 +1,53 @@
 <h2>Listado de Clientes</h2>
 
-<!-- =========================
-     Barra de búsqueda
-========================= -->
 <div class="toolbar">
   <div class="search-box">
-    <input type="text" placeholder="Cliente ID (ej: CLI001)" />
+    <input
+      type="text"
+      placeholder="Cliente ID (ej: CLI001)"
+      [(ngModel)]="clienteIdBusqueda"
+    />
 
-    <button class="btn btn-primary">
+    <button class="btn btn-primary" (click)="buscarPorClienteId()">
       Buscar
     </button>
 
-    <button class="btn btn-secondary">
+    <button class="btn btn-secondary" (click)="limpiarBusqueda()">
       Limpiar
     </button>
   </div>
 
-  <!-- Botón Nuevo Cliente -->
   <button class="btn btn-primary" routerLink="/clientes/nuevo">
     Nuevo Cliente
   </button>
 </div>
 
-<!-- =========================
-     Indicador de carga
-========================= -->
-<div *ngIf="loading">
-  Cargando clientes...
-</div>
-
-<!-- =========================
-     Tabla de clientes
-========================= -->
-<table *ngIf="!loading && clientes.length > 0" border="1" cellpadding="8">
+<table
+  class="table"
+  *ngIf="!loading && clientes.length > 0"
+>
   <thead>
     <tr>
       <th>Cliente ID</th>
       <th>Nombre</th>
       <th>Estado</th>
+      <th>Acciones</th>
     </tr>
   </thead>
+
   <tbody>
     <tr *ngFor="let cliente of clientes">
       <td>{{ cliente.clienteId }}</td>
       <td>{{ cliente.nombre }}</td>
       <td>{{ cliente.estado ? 'Activo' : 'Inactivo' }}</td>
+      <td>
+        <button
+          class="btn btn-danger"
+          (click)="cambiarEstado(cliente)"
+        >
+          {{ cliente.estado ? 'Desactivar' : 'Activar' }}
+        </button>
+      </td>
     </tr>
   </tbody>
 </table>
-
-<!-- =========================
-     Sin resultados
-========================= -->
-<div *ngIf="!loading && clientes.length === 0">
-  No existen clientes registrados.
-</div>
