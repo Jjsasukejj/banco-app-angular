@@ -1,0 +1,66 @@
+<h2>Registrar Movimiento</h2>
+
+<!-- Error -->
+<div *ngIf="error" class="error">
+  {{ error }}
+</div>
+
+<form (ngSubmit)="guardar()">
+
+  <div class="form-row">
+    <label>Número de Cuenta</label>
+    <input
+      type="text"
+      [(ngModel)]="movimiento.numeroCuenta"
+      name="numeroCuenta"
+      required
+    />
+  </div>
+
+  <div class="form-row">
+    <label>Tipo de Movimiento</label>
+    <select
+      [(ngModel)]="movimiento.tipoMovimiento"
+      name="tipoMovimiento"
+    >
+      <option [ngValue]="1">Ahorro</option>
+      <option [ngValue]="2">Corriente</option>
+    </select>
+  </div>
+
+  <div class="form-row">
+    <label>Valor</label>
+    <input
+      type="number"
+      [(ngModel)]="movimiento.valor"
+      name="valor"
+      min="1"
+      required
+    />
+  </div>
+
+  <div class="actions">
+    <button
+      type="button"
+      class="btn btn-secondary"
+      routerLink="/clientes"
+    >
+      Regresar
+    </button>
+
+    <button
+      type="submit"
+      class="btn btn-primary"
+      [disabled]="loading"
+    >
+      {{ loading ? 'Procesando...' : 'Registrar Movimiento' }}
+    </button>
+  </div>
+</form>
+
+<!-- Resultado -->
+<div *ngIf="resultado" class="result">
+  <h3>Movimiento registrado</h3>
+  <p><strong>Fecha:</strong> {{ resultado.fecha }}</p>
+  <p><strong>Saldo actual:</strong> {{ resultado.saldo | currency }}</p>
+</div>

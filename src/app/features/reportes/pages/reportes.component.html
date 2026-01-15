@@ -1,0 +1,71 @@
+<h2>Reporte de Movimientos</h2>
+
+<!-- Filtros -->
+<div class="toolbar">
+  <input
+    type="text"
+    placeholder="Cliente ID"
+    [(ngModel)]="clienteId"
+  />
+
+  <input
+    type="date"
+    [(ngModel)]="fechaInicio"
+  />
+
+  <input
+    type="date"
+    [(ngModel)]="fechaFin"
+  />
+
+  <button class="btn btn-primary" (click)="buscar()">
+    Buscar
+  </button>
+</div>
+
+<!-- Error -->
+<div *ngIf="error" class="error">
+  {{ error }}
+</div>
+
+<!-- Loading -->
+<div *ngIf="loading">
+  Cargando reporte...
+</div>
+
+<!-- Resumen -->
+<div *ngIf="reporte">
+  <h3>Cliente: {{ reporte.cliente }}</h3>
+
+  <div class="summary">
+    <div>Total Créditos: {{ reporte.totalCredito | currency }}</div>
+    <div>Total Débitos: {{ reporte.totalDebito | currency }}</div>
+  </div>
+
+  <!-- Tabla -->
+  <table border="1" cellpadding="8">
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>Cuenta</th>
+        <th>Tipo</th>
+        <th>Valor</th>
+        <th>Saldo</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let m of reporte.movimientos">
+        <td>{{ m.fecha | date:'short' }}</td>
+        <td>{{ m.numeroCuenta }}</td>
+        <td>{{ m.tipoMovimiento }}</td>
+        <td>{{ m.valor | currency }}</td>
+        <td>{{ m.saldo | currency }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- PDF -->
+  <button class="btn btn-secondary" (click)="descargarPdf()">
+    Descargar PDF
+  </button>
+</div>

@@ -1,0 +1,60 @@
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { MovimientosService } from '../../services/movimientos.service';
+import { CreateMovimientoRequest } from '../../models/create-movimiento.request';
+import { Movimiento } from '../../models/movimiento.model';
+import { ChangeDetectorRef } from "@angular/core";
+import { finalize } from "rxjs";
+
+@Component({
+    selector: 'app-movimientos-create',
+    standalone: true,
+    imports: [CommonModule, FormsModule],
+    templateUrl: './movimientos-create.component.html'
+})
+export class MovimientosCreateComponent {
+    /**
+     * Modelo del formulario
+     */
+    movimiento: CreateMovimientoRequest = {
+        numeroCuenta: '',
+        tipoMovimiento: 1,
+        valor: 0
+    };
+
+    resultado?: Movimiento;
+    loading = false;
+    error?: string;
+
+    constructor(
+        private readonly movimientosService: MovimientosService,
+        private readonly cdr: ChangeDetectorRef) { }
+    /**
+     * Envia el movimiento al backend
+     */
+    guardar(): void {
+        this.loading = true;
+        this.error = undefined;
+        this.resultado = undefined;
+
+        this.movimientosService.registrarMovimiento(this.movimiento)
+            .pipe(
+                finalize(() => {
+                    this.loading = false;
+                    //Fuerza a Angular a refrescar la vista 
+                    this.cdr.detectChanges();
+                })
+            )
+            .subscribe({
+                next: response => {
+                    this.resultado = response;
+                    this.loading = false;
+                },
+                error: err => {
+                    this.error = err.error ?? 'Error al registrar el movimiento';
+                    this.loading = false;
+                }
+            });
+    }
+}
