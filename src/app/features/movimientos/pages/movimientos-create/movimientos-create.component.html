@@ -5,7 +5,7 @@
   {{ error }}
 </div>
 
-<form (ngSubmit)="guardar()">
+<form (ngSubmit)="guardar()" class="form">
 
   <div class="form-row">
     <label>Número de Cuenta</label>
@@ -22,9 +22,10 @@
     <select
       [(ngModel)]="movimiento.tipoMovimiento"
       name="tipoMovimiento"
+      required
     >
-      <option [ngValue]="1">Ahorro</option>
-      <option [ngValue]="2">Corriente</option>
+      <option [ngValue]="1">Crédito</option>
+      <option [ngValue]="2">Débito</option>
     </select>
   </div>
 
@@ -43,7 +44,7 @@
     <button
       type="button"
       class="btn btn-secondary"
-      routerLink="/clientes"
+      routerLink="/movimientos"
     >
       Regresar
     </button>
@@ -56,11 +57,12 @@
       {{ loading ? 'Procesando...' : 'Registrar Movimiento' }}
     </button>
   </div>
+
 </form>
 
 <!-- Resultado -->
 <div *ngIf="resultado" class="result">
   <h3>Movimiento registrado</h3>
-  <p><strong>Fecha:</strong> {{ resultado.fecha }}</p>
+  <p><strong>Fecha:</strong> {{ resultado.fecha | date:'dd/MM/yyyy HH:mm' }}</p>
   <p><strong>Saldo actual:</strong> {{ resultado.saldo | currency }}</p>
 </div>

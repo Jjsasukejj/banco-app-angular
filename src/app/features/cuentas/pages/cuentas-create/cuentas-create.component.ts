@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { CuentasService } from '../../services/cuentas.service';
 import { CreateCuentaRequest } from '../../models/create-cuenta.request';
 import { RouterModule } from '@angular/router';
+import { finalize } from "rxjs";
+import { ChangeDetectorRef } from "@angular/core";
 
 @Component({
     selector: 'app-cuentas-create',
@@ -29,7 +31,8 @@ export class CuentasCreateComponent {
 
     constructor(
         private readonly cuentasService: CuentasService,
-        private readonly router: Router) { }
+        private readonly router: Router,
+        private readonly cdr: ChangeDetectorRef) { }
     /**
      * Envia el formulario al backend
      */
@@ -38,15 +41,22 @@ export class CuentasCreateComponent {
         this.error = undefined;
 
         this.cuentasService.crearCuenta(this.cuenta)
-        .subscribe({
-            next: () => {
-                this.router.navigate(['/cuentas']);
-            },
-            error: (err) => {
-                this.error = err.error ?? 'Error al crear cuenta';
-                this.loading = false;
-            }
-        });
+            .pipe(
+                finalize(() => {
+                    this.loading = false;
+                    //Fuerza a Angular a refrescar la vista 
+                    this.cdr.detectChanges();
+                })
+            )
+            .subscribe({
+                next: () => {
+                    this.router.navigate(['/cuentas']);
+                },
+                error: (err) => {
+                    this.error = err.error ?? 'Error al crear cuenta';
+                    this.loading = false;
+                }
+            });
     }
     /**
      * Regresa al listado
