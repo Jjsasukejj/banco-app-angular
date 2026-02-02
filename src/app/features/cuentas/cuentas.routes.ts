@@ -13,5 +13,9 @@ export const CUENTAS_ROUTES: Routes = [
     {
         path: 'nuevo',
         component: CuentasCreateComponent
+    },
+    {
+        path: 'editar/:numeroCuenta',
+        component: CuentasCreateComponent
     }
 ];

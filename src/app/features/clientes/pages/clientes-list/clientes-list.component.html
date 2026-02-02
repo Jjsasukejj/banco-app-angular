@@ -1,12 +1,12 @@
 <h2>Listado de Clientes</h2>
 
+<div *ngIf="error" class="error">
+  {{ error }}
+</div>
+
 <div class="toolbar">
   <div class="search-box">
-    <input
-      type="text"
-      placeholder="Cliente ID (ej: CLI001)"
-      [(ngModel)]="clienteIdBusqueda"
-    />
+    <input type="text" placeholder="Cliente ID" [(ngModel)]="clienteIdBusqueda" />
 
     <button class="btn btn-primary" (click)="buscarPorClienteId()">
       Buscar
@@ -22,14 +22,14 @@
   </button>
 </div>
 
-<table
-  class="table"
-  *ngIf="!loading && clientes.length > 0"
->
+<table class="table" *ngIf="!loading && clientes.length > 0">
   <thead>
     <tr>
       <th>Cliente ID</th>
       <th>Nombre</th>
+      <th>Identificacion</th>
+      <th>Direccion</th>
+      <th>Telefono</th>
       <th>Estado</th>
       <th>Acciones</th>
     </tr>
@@ -37,15 +37,18 @@
 
   <tbody>
     <tr *ngFor="let cliente of clientes">
-      <td>{{ cliente.clienteId }}</td>
+      <td>{{ cliente.id }}</td>
       <td>{{ cliente.nombre }}</td>
-      <td>{{ cliente.estado ? 'Activo' : 'Inactivo' }}</td>
+      <td>{{ cliente.identificacion }}</td>
+      <td>{{ cliente.direccion }}</td>
+      <td>{{ cliente.telefono }}</td>
+      <td>{{ cliente.estado }}</td>
       <td>
-        <button
-          class="btn btn-danger"
-          (click)="cambiarEstado(cliente)"
-        >
-          {{ cliente.estado ? 'Desactivar' : 'Activar' }}
+        <button class="btn btn-warning" [routerLink]="['/clientes/editar', cliente.id]">
+          Editar
+        </button>
+        <button class="btn btn-danger" *ngIf="cliente.estado === 'ACTIVO'" (click)="inactivar(cliente.id)">
+          Desactivar
         </button>
       </td>
     </tr>

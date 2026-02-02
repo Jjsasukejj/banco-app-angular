@@ -3,8 +3,11 @@
  */
 export interface ReporteMovimiento {
     fecha: string;
+    cliente: string;
     numeroCuenta: string;
-    tipoMovimiento: string;
-    valor: number;
-    saldo: number;
+    tipoCuenta: string;
+    saldoInicial: number;
+    estado: string;
+    movimiento: number;
+    saldoDisponible: number;
 }

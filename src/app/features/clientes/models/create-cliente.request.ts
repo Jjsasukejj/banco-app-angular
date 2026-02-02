@@ -3,17 +3,13 @@
  */
 export interface CreateClienteRequest {
     /**
-     * Identificador del cliente (CLI001)
-     */
-    clienteId: string;
-    /**
      * Nombre del cliente 
      */
     nombre: string;
     /**
      * Genero del cliente 
      */
-    genero: string;
+    genero: 'MASCULINO' | 'FEMENINO' | 'OTRO' | null;
     /**
      * Edad del cliente
      */
@@ -37,5 +33,5 @@ export interface CreateClienteRequest {
     /**
      * Estado del cliente
      */
-    estado: boolean;
+    estado: 'ACTIVO' | 'INACTIVO';
 }

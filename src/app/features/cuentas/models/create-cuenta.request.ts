@@ -3,8 +3,7 @@
  */
 export interface CreateCuentaRequest {
     numeroCuenta: string;
-    tipoCuenta: number;
+    tipoCuenta: 'AHORROS' | 'CORRIENTE';
     saldoInicial: number;
-    estado: boolean;
-    clienteId: string;
+    estado: 'ACTIVA' | 'INACTIVA';
 }

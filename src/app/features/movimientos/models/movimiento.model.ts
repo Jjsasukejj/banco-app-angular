@@ -6,5 +6,5 @@ export interface Movimiento {
     numeroCuenta: string;
     tipoMovimiento: string;
     valor: number;
-    saldo: number;
+    saldoPosterior: number;
 }

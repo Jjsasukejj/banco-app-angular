@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MovimientosService } from '../../services/movimientos.service';
-import { CreateMovimientoRequest } from '../../models/create-movimiento.request';
 import { Movimiento } from '../../models/movimiento.model';
 import { ChangeDetectorRef } from "@angular/core";
 import { finalize } from "rxjs";
@@ -14,14 +13,10 @@ import { finalize } from "rxjs";
     templateUrl: './movimientos-create.component.html'
 })
 export class MovimientosCreateComponent {
-    /**
-     * Modelo del formulario
-     */
-    movimiento: CreateMovimientoRequest = {
-        numeroCuenta: '',
-        tipoMovimiento: 1,
-        valor: 0
-    };
+
+    numeroCuenta = '';
+    tipo: 'DEPOSITO' | 'RETIRO' = 'DEPOSITO';
+    monto = 0;
 
     resultado?: Movimiento;
     loading = false;
@@ -38,7 +33,11 @@ export class MovimientosCreateComponent {
         this.error = undefined;
         this.resultado = undefined;
 
-        this.movimientosService.registrarMovimiento(this.movimiento)
+        const request$ = this.tipo === 'DEPOSITO' 
+            ? this.movimientosService.depositar(this.numeroCuenta, this.monto) 
+            : this.movimientosService.retirar(this.numeroCuenta, this.monto);
+
+        request$
             .pipe(
                 finalize(() => {
                     this.loading = false;
@@ -52,7 +51,7 @@ export class MovimientosCreateComponent {
                     this.loading = false;
                 },
                 error: err => {
-                    this.error = err.error ?? 'Error al registrar el movimiento';
+                    this.error = err?.error?.message;
                     this.loading = false;
                 }
             });

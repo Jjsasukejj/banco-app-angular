@@ -1,16 +1,13 @@
-<h2>Crear Cliente</h2>
+<h2>
+    {{ isEditMode ? 'Editar Cliente' : 'Crear Cliente' }}
+</h2>
 
 <!-- Mensaje de error -->
 <div *ngIf="error" class="error">
     {{ error }}
 </div>
 
-<form (ngSubmit)="guardar()" class="form">
-
-    <div class="form-row">
-        <label>Cliente ID</label>
-        <input [(ngModel)]="cliente.clienteId" name="clienteId" required />
-    </div>
+<form *ngIf="!loading" (ngSubmit)="guardar()" class="form">
 
     <div class="form-row">
         <label>Nombre</label>
@@ -19,7 +16,12 @@
 
     <div class="form-row">
         <label>Género</label>
-        <input [(ngModel)]="cliente.genero" name="genero" />
+        <select [(ngModel)]="cliente.genero" name="genero" required>
+            <option value="">Seleccione</option>
+            <option value="MASCULINO">Masculino</option>
+            <option value="FEMENINO">Femenino</option>
+            <option value="OTRO">Otro</option>
+        </select>
     </div>
 
     <div class="form-row">
@@ -42,9 +44,18 @@
         <input [(ngModel)]="cliente.telefono" name="telefono" />
     </div>
 
-    <div class="form-row">
+    <div class="form-row" *ngIf="!isEditMode">
         <label>Contraseña</label>
-        <input type="password" [(ngModel)]="cliente.contrasena" name="contrasena" />
+        <input type="password" [(ngModel)]="cliente.contrasena" name="contrasena" required />
+    </div>
+
+    <div class="form-row">
+        <label>Estado</label>
+        <select [(ngModel)]="cliente.estado" name="estado" required>
+            <option value="">Seleccione</option>
+            <option value="ACTIVO">Activo</option>
+            <option value="INACTIVO">Inactivo</option>
+        </select>
     </div>
 
     <!-- Botones -->
@@ -54,7 +65,7 @@
         </button>
 
         <button type="submit" class="btn btn-primary" [disabled]="loading">
-            {{ loading ? 'Guardando...' : 'Crear Cliente' }}
+            {{ loading ? 'Guardando...' : (isEditMode ? 'Actualizar Cliente' : 'Crear Cliente') }}
         </button>
     </div>
 

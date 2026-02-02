@@ -1,32 +1,53 @@
-<h2>Crear Cuenta</h2>
+<h2>
+  {{ isEditMode ? 'Editar Cuenta' : 'Crear Cuenta' }}
+</h2>
 
 <div *ngIf="error" class="error">
   {{ error }}
 </div>
 
-<form class="form">
+<p *ngIf="loading">Cargando...</p>
+
+<form *ngIf="!loading" class="form" (ngSubmit)="guardar()">
 
   <div class="form-row">
     <label>Número de Cuenta</label>
-    <input [(ngModel)]="cuenta.numeroCuenta" name="numeroCuenta" required />
+    <input *ngIf="!isEditMode" [(ngModel)]="cuenta.numeroCuenta" name="numeroCuenta" required />
+    <input *ngIf="isEditMode" [ngModel]="cuenta.numeroCuenta" name="numeroCuentaReadonly" disabled />
   </div>
 
   <div class="form-row">
     <label>Tipo de Cuenta</label>
-    <select [(ngModel)]="cuenta.tipoCuenta" name="tipoCuenta">
-      <option [ngValue]="1">Ahorros</option>
-      <option [ngValue]="2">Corriente</option>
+    <select *ngIf="!isEditMode" [(ngModel)]="cuenta.tipoCuenta" name="tipoCuenta" required>
+      <option value="AHORROS">Ahorros</option>
+      <option value="CORRIENTE">Corriente</option>
+    </select>
+    <select *ngIf="isEditMode" [(ngModel)]="cuentaEdit.tipoCuenta" name="tipoCuentaEdit" required>
+      <option value="AHORROS">Ahorros</option>
+      <option value="CORRIENTE">Corriente</option>
     </select>
   </div>
 
-  <div class="form-row">
+  <div class="form-row" *ngIf="!isEditMode">
     <label>Saldo Inicial</label>
-    <input type="number" [(ngModel)]="cuenta.saldoInicial" name="saldoInicial" />
+    <input type="number" [(ngModel)]="cuenta.saldoInicial" name="saldoInicial" required />
+  </div>
+
+  <div class="form-row" *ngIf="!isEditMode">
+    <label>Cliente ID</label>
+    <input [(ngModel)]="clienteId" name="clienteId" required />
   </div>
 
   <div class="form-row">
-    <label>Cliente ID</label>
-    <input [(ngModel)]="cuenta.clienteId" name="clienteId" required />
+    <label>Estado</label>
+    <select *ngIf="!isEditMode" [(ngModel)]="cuenta.estado" name="estado" required>
+      <option value="ACTIVA">Activa</option>
+      <option value="INACTIVA">Inactiva</option>
+    </select>
+    <select *ngIf="isEditMode" [(ngModel)]="cuentaEdit.estado" name="estadoEdit" required>
+      <option value="ACTIVA">Activa</option>
+      <option value="INACTIVA">Inactiva</option>
+    </select>
   </div>
 
   <div class="actions">
@@ -35,7 +56,7 @@
     </button>
 
     <button type="submit" class="btn btn-primary" (click)="guardar()" [disabled]="loading">
-      {{ loading ? 'Guardando...' : 'Crear Cuenta' }}
+      {{ loading ? 'Guardando...' : (isEditMode ? 'Actualizar Cuenta' : 'Crear Cuenta') }}
     </button>
   </div>
 

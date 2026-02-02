@@ -2,24 +2,27 @@
 
 <!-- Filtros -->
 <div class="toolbar">
-  <input
-    type="text"
-    placeholder="Cliente ID"
-    [(ngModel)]="clienteId"
-  />
+  <div class="form-row">
+    <label>Cliente ID</label>
+    <input type="text" [(ngModel)]="clienteId" />
+  </div>
 
-  <input
-    type="date"
-    [(ngModel)]="fechaInicio"
-  />
+  <div class="form-row">
+    <label>Fecha Desde</label>
+    <input type="date" [(ngModel)]="fechaInicio" />
+  </div>
 
-  <input
-    type="date"
-    [(ngModel)]="fechaFin"
-  />
+  <div class="form-row">
+    <label>Fecha Hasta</label>
+    <input type="date" [(ngModel)]="fechaFin" />
+  </div>
 
-  <button class="btn btn-primary" (click)="buscar()">
+  <button class="btn btn-primary" (click)="buscar()" [disabled]="loading">
     Buscar
+  </button>
+
+  <button *ngIf="reporte && !loading" class="btn btn-secondary" (click)="descargarPdf()">
+    Descargar PDF
   </button>
 </div>
 
@@ -34,38 +37,42 @@
 </div>
 
 <!-- Resumen -->
-<div *ngIf="reporte">
-  <h3>Cliente: {{ reporte.cliente }}</h3>
+<div *ngIf="reporte && !loading">
+  <h3>Cliente ID: {{ reporte.clienteId }}</h3>
 
   <div class="summary">
     <div>Total Créditos: {{ reporte.totalCredito | currency }}</div>
     <div>Total Débitos: {{ reporte.totalDebito | currency }}</div>
   </div>
 
-  <!-- Tabla -->
-  <table border="1" cellpadding="8">
+  <p *ngIf="reporte.movimientos.length === 0">
+    No existen movimientos en el rango seleccionado.
+  </p>
+
+  <table *ngIf="reporte.movimientos.length > 0" border="1" cellpadding="8">
     <thead>
       <tr>
         <th>Fecha</th>
-        <th>Cuenta</th>
+        <th>Cliente</th>
+        <th>Numero Cuenta</th>
         <th>Tipo</th>
-        <th>Valor</th>
-        <th>Saldo</th>
+        <th>Saldo Inicial</th>
+        <th>Estado</th>
+        <th>Movimiento</th>
+        <th>Saldo Disponible</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let m of reporte.movimientos">
         <td>{{ m.fecha | date:'short' }}</td>
+        <td>{{ m.cliente }}</td>
         <td>{{ m.numeroCuenta }}</td>
-        <td>{{ m.tipoMovimiento }}</td>
-        <td>{{ m.valor | currency }}</td>
-        <td>{{ m.saldo | currency }}</td>
+        <td>{{ m.tipoCuenta }}</td>
+        <td>{{ m.saldoInicial | currency }}</td>
+        <td>{{ m.estado }}</td>
+        <td>{{ m.movimiento | currency }}</td>
+        <td>{{ m.saldoDisponible | currency }}</td>
       </tr>
     </tbody>
   </table>
-
-  <!-- PDF -->
-  <button class="btn btn-secondary" (click)="descargarPdf()">
-    Descargar PDF
-  </button>
 </div>

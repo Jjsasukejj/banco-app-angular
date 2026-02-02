@@ -13,11 +13,18 @@ import { Movimiento } from '../models/movimiento.model';
 export class MovimientosService {
     private readonly movimientosUrl = `${API_CONFIG.baseUrl}/movimientos`;
 
-    constructor(private readonly http: HttpClient) {}
+    constructor(private readonly http: HttpClient) { }
     /**
-     * registrar un movimiento
+     * registrar un deposito
      */
-    registrarMovimiento(request: CreateMovimientoRequest) : Observable<Movimiento> {
-        return this.http.post<Movimiento>(this.movimientosUrl, request);
+    depositar(numeroCuenta: string, monto: number): Observable<Movimiento> {
+        return this.http.post<Movimiento>(`${this.movimientosUrl}/depositos/${numeroCuenta}`, { monto });
+    };
+
+    /**
+     * registrar un deposito
+     */
+    retirar(numeroCuenta: string, monto: number): Observable<Movimiento> {
+        return this.http.post<Movimiento>(`${this.movimientosUrl}/retiros/${numeroCuenta}`, { monto });
     };
 }

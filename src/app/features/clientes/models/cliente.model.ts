@@ -5,7 +5,7 @@ export interface Cliente{
     /**
      * Identificador del cliente (CLI001)
      */
-    clienteId: string;
+    id: number;
     /**
      * Nombre del cliente 
      */
@@ -13,7 +13,7 @@ export interface Cliente{
     /**
      * Genero del cliente 
      */
-    genero: string;
+    genero: 'MASCULINO' | 'FEMENINO' | 'OTRO';
     /**
      * Edad del cliente
      */
@@ -33,5 +33,5 @@ export interface Cliente{
     /**
      * Estado del cliente
      */
-    estado: boolean;
+    estado: 'ACTIVO' | 'INACTIVO';
 }

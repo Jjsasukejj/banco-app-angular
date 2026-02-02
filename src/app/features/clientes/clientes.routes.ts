@@ -12,5 +12,9 @@ export const CLIENTES_ROUTES: Routes = [
     {
         path: 'nuevo',
         component: ClienteCreateComponent
+    },
+    {
+        path: 'editar/:id',
+        component: ClienteCreateComponent
     }
 ];

@@ -26,7 +26,7 @@ export class ClientesListComponent implements OnInit {
     /**
      * ClienteId ingresado parav busqueda
      */
-    clienteIdBusqueda = '';
+    clienteIdBusqueda?: string;
     /**
      * Indica si estamos mostrando resultados de busqueda
      */
@@ -38,6 +38,8 @@ export class ClientesListComponent implements OnInit {
     /**
      * Inyectamos el servicio de clientes
      */
+
+    error?: string;
     constructor(private readonly clientesService: ClienteService, private readonly cdr: ChangeDetectorRef) { }
     /**
      * Ciclo de vida de Angular, se ejecuta una sola vez al cargar el componente
@@ -75,14 +77,21 @@ export class ClientesListComponent implements OnInit {
      * Busca un cliente por ClienteId
      */
     buscarPorClienteId(): void {
-        const id = this.clienteIdBusqueda.trim();
+        const raw = this.clienteIdBusqueda?.trim();
+        this.error = undefined;
 
-        if (!id) {
+        if (!raw) {
+            this.cargarClientes();
             return;
         }
 
         this.loading = true;
         this.buscando = true;
+        const id = Number(raw);
+        if (Number.isNaN(id)) {
+            this.error = 'El Id debe ser numerico';
+            return;
+        }
 
         this.clientesService.obtenerClientePorId(id)
             .pipe(
@@ -101,7 +110,7 @@ export class ClientesListComponent implements OnInit {
                     this.loading = false;
                 },
                 error: (err) => {
-                    console.error('Cliente no encontrado', err);
+                    this.error = err?.error?.message;
                     this.clientes = [];
                     this.loading = false;
                 },
@@ -114,25 +123,18 @@ export class ClientesListComponent implements OnInit {
         this.clienteIdBusqueda = '';
         this.buscando = false;
         this.cargarClientes();
+        this.error = '';
     }
     /**
      * Cambia el estado del cliente llamado al backend 
      */
-    cambiarEstado(cliente: Cliente): void {
-        const nuevoEstado = !cliente.estado;
-
+    inactivar(clienteId: number) {
+        this.error = undefined;
         this.clientesService
-            .actualizarCliente(cliente.clienteId, nuevoEstado)
+            .inactivarCliente(clienteId)
             .subscribe({
-                next: () => {
-                    console.log('cambia estado?', cliente.estado);
-                    //Reflejamos el cambio localmente
-                    cliente.estado = nuevoEstado;
-                },
-                error: (err) => {
-                    console.error('Error al actualizar estado', err);
-                    alert('No se pudo actualizar el estado del cliente');
-                }
+                next: () => this.cargarClientes(),
+                error: (err) => this.error = err?.error?.message ?? 'No se pudo inactivar'
             });
     }
 }

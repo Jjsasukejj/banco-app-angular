@@ -1,15 +1,21 @@
 <h2>Listado de Cuentas</h2>
 
+<p *ngIf="!loading && cuentas.length === 0">
+  No se encontraron cuentas.
+</p>
+
 <div class="toolbar">
   <div class="search-box">
-    <input
-      type="text"
-      placeholder="Número de cuenta"
-      [(ngModel)]="numeroCuentaBusqueda"
-    />
+    <input type="text" placeholder="Número de cuenta" [(ngModel)]="numeroCuentaBusqueda" />
+
+    <input type="text" placeholder="Cliente ID" [(ngModel)]="clienteIdBusqueda" />
 
     <button class="btn btn-primary" (click)="buscarPorNumero()">
-      Buscar
+      Buscar por Cuenta
+    </button>
+
+    <button class="btn btn-primary" (click)="buscarPorClienteId()">
+      Buscar por Cliente
     </button>
 
     <button class="btn btn-secondary" (click)="limpiarBusqueda()">
@@ -22,16 +28,15 @@
   </button>
 </div>
 
-<table
-  class="table"
-  *ngIf="!loading && cuentas.length > 0"
->
+<table class="table" *ngIf="!loading && cuentas.length > 0">
   <thead>
     <tr>
       <th>Número</th>
       <th>Tipo</th>
       <th>Saldo</th>
       <th>Estado</th>
+      <th>Cliente</th>
+      <th>Acciones</th>
     </tr>
   </thead>
 
@@ -40,7 +45,16 @@
       <td>{{ cuenta.numeroCuenta }}</td>
       <td>{{ cuenta.tipoCuenta }}</td>
       <td>{{ cuenta.saldo | currency }}</td>
-      <td>{{ cuenta.estado ? 'Activa' : 'Inactiva' }}</td>
+      <td>{{ cuenta.estado }}</td>
+      <td>{{ cuenta.clienteNombre }}</td>
+      <td>
+        <button class="btn btn-warning" [routerLink]="['editar', cuenta.numeroCuenta]">
+          Editar
+        </button>
+        <button class="btn btn-danger" *ngIf="cuenta.estado === 'ACTIVA'" (click)="eliminar(cuenta.numeroCuenta)">
+          Eliminar
+        </button>
+      </td>
     </tr>
   </tbody>
 </table>

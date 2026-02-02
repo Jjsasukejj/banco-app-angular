@@ -5,6 +5,7 @@ import { Cliente } from "../models/cliente.model";
 import { CreateClienteRequest } from "../models/create-cliente.request";
 import { UpdateEstadoClienteRequest } from "../models/update-estado-cliente.request";
 import { API_CONFIG } from "../../../core/config/api.config";
+import { ActualizarClienteRequest } from "../models/actualizar-cliente.request";
 /**
  * Servicio para la comunicacion entre frontend y backend del dominio Clientes
  */
@@ -30,10 +31,10 @@ export class ClienteService {
         return this.http.get<Cliente[]>(this.clienteUrl);
     }
     /**
-     * Obtiene un cliente por su ClienteId
+     * Obtiene un cliente por su Id
      */
-    obtenerClientePorId(clienteId: string): Observable<Cliente> {
-        return this.http.get<Cliente>(`${this.clienteUrl}/${clienteId}`);
+    obtenerClientePorId(id: number): Observable<Cliente> {
+        return this.http.get<Cliente>(`${this.clienteUrl}/${id}`);
     }
     /**
      * Crear un nuevo cliente
@@ -42,9 +43,15 @@ export class ClienteService {
         return this.http.post<void>(this.clienteUrl, request);
     }
     /**
-     * Actualizar el estado de un cliente (activo/inactivo)
+     * Delete logico de un cliente (activo/inactivo)
      */
-    actualizarCliente(clienteId: string, estado: boolean): Observable<void> {
-        return this.http.patch<void>(`${this.clienteUrl}/${clienteId}/estado`, estado);
+    inactivarCliente(id: number): Observable<void> {
+        return this.http.delete<void>(`${this.clienteUrl}/${id}`);
+    }
+    /**
+     * Actualizar un cliente
+     */
+    actualizarCliente(id: number, request: ActualizarClienteRequest): Observable<Cliente> {
+        return this.http.put<Cliente>(`${this.clienteUrl}/${id}`, request);
     }
 }
